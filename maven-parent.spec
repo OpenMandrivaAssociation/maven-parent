@@ -1,7 +1,7 @@
 %{?_javapackages_macros:%_javapackages_macros}
 Name:           maven-parent
-Version:        20
-Release:        5.1%{?dist}
+Version:        26
+Release:        1%{?dist}
 Summary:        Apache Maven parent POM
 License:        ASL 2.0
 URL:            http://maven.apache.org
@@ -16,6 +16,9 @@ Apache Maven parent POM file used by other Maven projects.
 
 %prep
 %setup -q
+%pom_remove_plugin :maven-enforcer-plugin
+%pom_remove_plugin :maven-checkstyle-plugin
+%pom_remove_plugin :apache-rat-plugin
 
 %build
 %mvn_build
@@ -27,6 +30,27 @@ Apache Maven parent POM file used by other Maven projects.
 %doc LICENSE NOTICE
 
 %changelog
+* Mon Nov 17 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 26-1
+- Update to upstream version 26
+
+* Thu Oct 23 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 25-1
+- Update to upstream version 25
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 24-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Wed May 28 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 24-2
+- Rebuild to regenerate Maven auto-requires
+
+* Wed Apr  2 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 24-1
+- Update to upstream version 24
+
+* Mon Mar 10 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 23-1
+- Update to upstream version 23
+
+* Fri Sep 20 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 20-6
+- Rebuild to regenerate Maven provides
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 20-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
@@ -45,3 +69,4 @@ Apache Maven parent POM file used by other Maven projects.
 
 * Thu Jun 23 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 20-1
 - Initial version of the package
+
