@@ -4,7 +4,7 @@ Version:        26
 Release:        1%{?dist}
 Summary:        Apache Maven parent POM
 License:        ASL 2.0
-URL:            http://maven.apache.org
+URL:            https://maven.apache.org
 Source0:        http://repo1.maven.org/maven2/org/apache/maven/%{name}/%{version}/%{name}-%{version}-source-release.zip
 BuildArch:      noarch
 
