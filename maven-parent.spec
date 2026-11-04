@@ -1,72 +1,31 @@
-%{?_javapackages_macros:%_javapackages_macros}
 Name:           maven-parent
-Version:        26
-Release:        1%{?dist}
+Version:        50
+Release:        1
 Summary:        Apache Maven parent POM
 License:        ASL 2.0
 URL:            https://maven.apache.org
-Source0:        http://repo1.maven.org/maven2/org/apache/maven/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://github.com/apache/maven-parent/archive/refs/tags/maven-parent-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  maven-local
-BuildRequires:  apache-parent
+BuildRequires:	python
+BuildSystem:	maven
+# The tag is a reactor. This package publishes the parent POM only.
+BuildOption:	-N validate
 
 %description
 Apache Maven parent POM file used by other Maven projects.
 
 %prep
-%setup -q
-%pom_remove_plugin :maven-enforcer-plugin
-%pom_remove_plugin :maven-checkstyle-plugin
-%pom_remove_plugin :apache-rat-plugin
-
-%build
-%mvn_build
-
-%install
-%mvn_install
+%setup -q -n maven-parent-maven-parent-%{version}
+# maven-plugins and maven-shared-components are their own packages.
+# Leaving <modules> makes install publish those coordinates from this tree.
+python - <<'PY'
+import re
+from pathlib import Path
+path = Path("pom.xml")
+text = path.read_text()
+text = re.sub(r"\n  <modules>.*?</modules>", "", text, count=1, flags=re.S)
+path.write_text(text)
+PY
 
 %files -f .mfiles
-%doc LICENSE NOTICE
-
-%changelog
-* Mon Nov 17 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 26-1
-- Update to upstream version 26
-
-* Thu Oct 23 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 25-1
-- Update to upstream version 25
-
-* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 24-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
-
-* Wed May 28 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 24-2
-- Rebuild to regenerate Maven auto-requires
-
-* Wed Apr  2 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 24-1
-- Update to upstream version 24
-
-* Mon Mar 10 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 23-1
-- Update to upstream version 23
-
-* Fri Sep 20 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 20-6
-- Rebuild to regenerate Maven provides
-
-* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 20-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
-
-* Mon Feb 11 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 20-4
-- Build with xmvn
-
-* Fri Nov  2 2012 Mikolaj Izdebski <mizdebsk@redhat.com> - 20-4
-- Add missing BR/R: apache-parent
-- Update to current packaging guidelines
-
-* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 20-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
-
-* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 20-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
-
-* Thu Jun 23 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 20-1
-- Initial version of the package
-
+%doc LICENSE README.md
