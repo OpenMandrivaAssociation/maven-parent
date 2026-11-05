@@ -7,6 +7,9 @@ URL:            https://maven.apache.org
 Source0:        https://github.com/apache/maven-parent/archive/refs/tags/maven-parent-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:	python
+# Literal, so the first rpmbuild -bs records them before sysjar is installed.
+BuildRequires:	maven
+BuildRequires:	java-current-devel
 BuildSystem:	maven
 # The tag is a reactor. This package publishes the parent POM only.
 BuildOption:	-N validate
